@@ -58,7 +58,7 @@ https://www.rabbitmq.com/install-windows.html#installer
 ```
 
 ### STEP 06- run command for celery tasks
-
+open new terminal activate your virtual enviroment and run following command
 ```bash
 celery -A inventory_management worker -l info --pool=solo
 ```
