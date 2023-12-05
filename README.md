@@ -26,6 +26,7 @@ pip install -r requirements.txt
 
 ### STEP 03- Change email creadential and database creadential
 
+```bash
 inventory_management\settings\settings.py
 EMAIL_HOST_USER = ''   # Replace your email here
 EMAIL_HOST_PASSWORD = '' # Replace your email app password here
@@ -41,6 +42,7 @@ DATABASES = {
         'PORT': '5432', # Replace your DB port here
     }
 }
+```
 
 ### STEP 04- Create table inside database
 
