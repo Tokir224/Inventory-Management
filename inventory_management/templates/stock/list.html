@@ -1,0 +1,108 @@
+{% extends 'include/base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block my_title %} Stocks List {% endblock my_title %}
+{% block my_css %}
+<head>
+    <style>
+    #myDatatable_length > label{
+            margin:15px;
+    }
+    @media only screen and (max-width: 1203px) {
+        #hide-state {
+            display: none;
+        }
+    }
+
+    @media only screen and (max-width: 1339px) {
+        #hide-gender {
+            display: none;
+        }
+    }
+
+    </style>
+</head>
+{%  endblock %}
+{% block content %}
+
+<!-- start page title -->
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-flex align-items-center justify-content-between">
+            <h4 class="mb-0">Stocks List</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="{% url 'dashboard:dashboard' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Stocks List</li>
+                </ol>
+            </div>
+
+        </div>
+    </div>
+</div>
+            <!-- end page title -->
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <table id="user_data" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Name</th>
+                            <th>Min Stock</th>
+                            <th>Available Stock</th>
+                            <th>Stocks</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div> <!-- end col -->
+</div> <!-- end row -->
+
+<script>
+    $(document).ready(function () {
+
+
+        var stocks = $('#user_data').DataTable({
+
+            "responsive": true,
+            "processing": true,
+            "serverSide": true,
+            "ordering": false,
+            "pagingType": "full_numbers",
+            "ajax": "{% url 'raw:raw_material_list_data' %}",
+
+            "columns": [
+                { "data": "index" },
+                { "data": "name" },
+                { "data": "min_stock" },
+                { "data": "available_stock" },
+                { "data": "stocks",
+                    render: function (data, type, row) {
+                        if (data){
+                            row = '<span class="badge badge-pill badge-success p-2">In-Stock</span>'
+                        }
+                        else{
+                            row = '<span class="badge badge-pill badge-danger p-2">Out-Stock</span>'
+                        }
+                        return row
+                    }
+                },
+            ],
+            rowCallback: function(row, data, index){
+                $(row).css('cursor', 'pointer');
+            }
+        });
+
+        $('#user_data tbody').on( 'click', 'tr', function () {
+            var rowData = stocks.row( this ).data();
+            window.location = "/admin/stock_list/" + rowData['pk'];
+        });
+
+    });
+
+</script>
+{% endblock %}

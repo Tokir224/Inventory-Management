@@ -1,0 +1,83 @@
+{% extends 'include/base.html' %}
+{% load widget_tweaks %}
+{% block my_title %} Users {% endblock my_title %}
+{% block my_css %}
+
+<style>
+    .account-form input {
+        border: 2px solid #ccc;
+        height: calc(2em + .75rem + 2px);
+    }
+
+    .account-form input:focus {
+        border-color: #1497ff;
+        box-shadow: none;
+    }
+</style>
+{%  endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class="row no-gutter">
+        <div class="col-md-12">
+            <div class="login d-flex align-items-center py-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-body">
+                                   <form class="needs-validation" method="post" id='id_user_form'  enctype="multipart/form-data" >
+                                    {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>First Name</label>
+                                                    {{form.first_name|add_class:'form-control'}}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Last Name</label>
+                                                    {{form.last_name|add_class:'form-control'}}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Email</label>
+                                                    {{form.email|add_class:'form-control'}}
+                                                    <b class="text-danger">{{form.errors.email|striptags}}</b>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Phone</label>
+                                                    {{form.phone|add_class:'form-control'}}
+                                                    <b class="text-danger">{{form.errors.phone|striptags}}</b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                       <div class="row">
+                                            <div class="col-md-6">
+                                                <button class="btn btn-primary button-color" type="submit">Save</button>
+                                                <a href="{% url 'admin_user:user_list' %}" class="btn btn-secondary waves-effect">Cancel</a>
+                                            </div>
+                                        </div>
+                                   </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#id_phone").keypress(function(){
+        if($("#id_phone").val().length == 10){
+            return false;
+        }
+    });
+</script>
+{% endblock %}

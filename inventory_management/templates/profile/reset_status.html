@@ -1,0 +1,76 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8" />
+        <title> Password Reset Status </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+        <meta content="Themesdesign" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{% static 'backend/images/favicon.ico' %}">
+
+        <!-- Bootstrap Css -->
+        <link href="{% static 'backend/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="{% static 'backend/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="{% static 'backend/css/app.min.css' %}" rel="stylesheet" type="text/css" />
+
+        <style>
+            .container-fluid {
+                max-width: 100%;
+            }
+
+            .account-form input {
+                border: 2px solid #ccc;
+                height: calc(2em + .75rem + 2px);
+            }
+
+            .account-form input:focus {
+                border-color: #1497ff;
+                box-shadow: none;
+            }
+        </style>
+
+    </head>
+
+    <body class="auth-body-bg">
+
+        <div class="container text-center">
+            <div class="row no-gutter">
+                <div class="col-md-12">
+                    <div class="login d-flex align-items-center py-5">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-12 col-lg-6  mx-auto">
+                                    <div class="p-4">
+                                        {% if 'email' in request.get_full_path %}
+                                        <h3 class="mb-4">Password Reset</h3>
+                                        <p>Check your email for instructions</p>
+                                        {% endif%}
+                                        {% if 'complete' in request.get_full_path %}
+                                        <h3 class="mb-4">Password Reset Success</h3>
+                                        <a href="{% url 'admin_user:login' %}">Login</a>
+                                        {% endif%}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- JAVASCRIPT -->
+        <script src="{% static 'backend/libs/jquery/jquery.min.js' %}"></script>
+        <script src="{% static 'backend/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'backend/libs/metismenu/metisMenu.min.js' %}"></script>
+        <script src="{% static 'backend/libs/simplebar/simplebar.min.js' %}"></script>
+        <script src="{% static 'backend/libs/node-waves/waves.min.js' %}"></script>
+
+        <script src="{% static 'backend/js/app.js' %}"></script>
+
+    </body>
+</html>

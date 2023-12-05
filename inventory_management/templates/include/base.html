@@ -1,0 +1,335 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8" />
+        <title>{% block my_title %} {% endblock my_title %}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="" name="description" />
+        <meta content="" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{% static 'backend/images/favicon.ico' %}">
+
+        <!-- jquery.vectormap css -->
+        <link href="{% static 'backend/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css' %}" rel="stylesheet" type="text/css" />
+
+        <!-- DataTables -->
+        <link href="{% static 'backend/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'backend/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'backend/libs/datatables.net-select-bs4/css//select.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+
+        <!-- Responsive datatable examples -->
+        <link href="{% static 'backend/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+
+        <!-- Bootstrap Css -->
+        <link href="{% static 'backend/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="{% static 'backend/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="{% static 'backend/css/app.min.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'backend/libs/toastr/build/toastr.min.css' %}" rel="stylesheet" type="text/css" />
+
+        <script type="text/javascript" src="{% static 'backend/js/datatable/jquery-3.5.1.js'  %}"></script>
+
+        <script src="{% static 'backend/libs/toastr/build/toastr.min.js' %}"></script>
+
+        <script src="{% static 'backend/libs/jquery/jquery.min.js' %}"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
+
+
+        {% block my_css %} {% endblock my_css %}
+
+    </head>
+    <body data-sidebar="dark">
+
+        <!-- Begin page -->
+        <div id="layout-wrapper">
+
+            <header id="page-topbar">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+<!--                        <div class="navbar-brand-box">-->
+<!--                            <a href="{% url 'dashboard:dashboard' %}" class="logo logo-dark">-->
+<!--                                <span class="logo-sm">-->
+<!--                                    <img src="{% static 'backend/images/logo-sm-dark.png' %}" alt="" height="22">-->
+<!--                                </span>-->
+<!--                                <span class="logo-lg">-->
+<!--                                    <img src="{% static 'backend/images/logo-dark.png' %}" alt="" height="20">-->
+<!--                                </span>-->
+<!--                            </a>-->
+
+<!--                            <a href="{% url 'dashboard:dashboard' %}" class="logo logo-light">-->
+<!--                                <span class="logo-sm">-->
+<!--                                    <img src="{% static 'backend/images/logo-sm-light.png' %}" alt="" height="22">-->
+<!--                                </span>-->
+<!--                                <span class="logo-lg">-->
+<!--                                    <img src="{% static 'backend/images/logo-light.png' %}" alt="" height="20">-->
+<!--                                </span>-->
+<!--                            </a>-->
+<!--                        </div>-->
+
+                        <button type="button" class="btn btn-sm px-3 font-size-24 header-item waves-effect" id="vertical-menu-btn">
+                            <i class="ri-menu-2-line align-middle"></i>
+                        </button>
+                    </div>
+                    <div class="d-flex">
+                        <h1 style="color:#252b3b;margin-left: 150px;">Inventory Management</h1>
+                    </div>
+                    <div class="d-flex">
+
+                        <div class="dropdown d-inline-block d-lg-none ml-2">
+                            <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-search-dropdown"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="ri-search-line"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0"
+                                aria-labelledby="page-header-search-dropdown">
+
+                                <form class="p-3">
+                                    <div class="form-group m-0">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search ...">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="submit"><i class="ri-search-line"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-none d-lg-inline-block ml-1">
+                            <button type="button" class="btn header-item noti-icon waves-effect" data-toggle="fullscreen">
+                                <i class="ri-fullscreen-line"></i>
+                            </button>
+                        </div>
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon waves-effect" id="page-header-notifications-dropdown"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="ri-notification-3-line"></i>
+                                {% if is_read is False %}
+                                <span class="noti-dot"></span>
+                                {% endif %}
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right p-0"
+                                aria-labelledby="page-header-notifications-dropdown">
+                                <div class="p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h6 class="m-0"> Notifications </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-simplebar style="max-height: 230px;">
+                                    {% for notification in notifications %}
+                                    <a href="{% url 'notification:notification_detail' notification.id %}" class="text-reset notification-item">
+                                        <div class="media">
+                                            <div class="avatar-xs mr-3">
+                                                <span class="avatar-title bg-primary rounded-circle font-size-16">
+                                                    <i class="ri-shopping-cart-line"></i>
+                                                </span>
+                                            </div>
+                                            <div class="media-body">
+                                                <h6 class="mt-0 mb-1">
+                                                    {% if notification.is_read %}
+                                                    {{notification.message}}
+                                                    {% else %}
+                                                    <b>{{notification.message}}</b>
+                                                    {% endif %}
+                                                </h6>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    {% endfor %}
+                                </div>
+<!--                                <div class="p-2 border-top">-->
+<!--                                    <a class="btn btn-sm btn-link font-size-14 btn-block text-center" href="javascript:void(0)">-->
+<!--                                        <i class="mdi mdi-arrow-right-circle mr-1"></i> View More..-->
+<!--                                    </a>-->
+<!--                                </div>-->
+                            </div>
+                        </div>
+
+                        <div class="dropdown d-inline-block user-dropdown">
+                            <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="rounded-circle header-profile-user" src="{% static 'backend/images/users/avatar-2.jpg' %}"
+                                    alt="Header Avatar">
+                                <span class="d-none d-xl-inline-block ml-1">{{request.user.first_name|capfirst}}</span>
+                                <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <!-- item-->
+                                <a class="dropdown-item" href="{% url 'admin_user:edit_details' %}"><i class="ri-user-line align-middle mr-1"></i> Profile</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="{% url 'admin_user:logout' %}"><i class="ri-shut-down-line align-middle mr-1 text-danger"></i> Logout</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </header>
+
+            <!-- ========== Left Sidebar Start ========== -->
+
+            <div class="vertical-menu">
+
+                <div data-simplebar class="h-100">
+
+                    <!--- Sidemenu -->
+                    <div id="sidebar-menu">
+                        <!-- Left Menu Start -->
+                        <ul class="metismenu list-unstyled" id="side-menu">
+                            <li class="menu-title">Menu</li>
+
+                            <li>
+                                <a href="{% url 'dashboard:dashboard' %}" class="waves-effect">
+                                    <i class="ri-dashboard-line"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'admin_user:user_list' %}" class=" waves-effect">
+                                    <i class="ri-calendar-2-line"></i>
+                                    <span>Users</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'product:product_list' %}" class=" waves-effect">
+                                    <i class="ri-calendar-2-line"></i>
+                                    <span>Products</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'product:product_ingredient_list' %}" class=" waves-effect">
+                                    <i class="ri-calendar-2-line"></i>
+                                    <span>Products Ingredient</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'raw:raw_material_list' %}" class=" waves-effect">
+                                    <i class="ri-calendar-2-line"></i>
+                                    <span>Raw Material</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'stock:stocks' %}" class=" waves-effect">
+                                    <i class="ri-calendar-2-line"></i>
+                                    <span>Stocks</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{% url 'stock:stock_consumption' %}" class=" waves-effect">
+                                    <i class="ri-calendar-2-line"></i>
+                                    <span>Stock Consumption</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <!-- Sidebar -->
+                </div>
+            </div>
+            <!-- Left Sidebar End -->
+
+            <!-- ============================================================== -->
+            <!-- Start right Content here -->
+            <!-- ============================================================== -->
+            <div class="main-content">
+
+                <div class="page-content">
+                    <div class="container-fluid">
+                        {% block content %}
+                        {% endblock %}
+
+                    </div> <!-- container-fluid -->
+                </div>
+                <!-- End Page-content -->
+                <footer class="footer">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <script>document.write(new Date().getFullYear())</script> © Inventory Management.
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-sm-right d-none d-sm-block">
+                                    Crafted with <i class="mdi mdi-heart text-danger"></i> by Tokirhusen Vora
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script>
+
+        toastr.options = {
+            "closeButton": true,
+        }
+        </script>
+        {% include 'include/notification.html' %}
+            <!-- end main content-->
+        <!-- END layout-wrapper -->
+
+        <!-- Right bar overlay-->
+        <div class="rightbar-overlay"></div>
+
+        <!-- JAVASCRIPT -->
+
+        <script src="{% static 'backend/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'backend/libs/metismenu/metisMenu.min.js' %}"></script>
+        <script src="{% static 'backend/libs/simplebar/simplebar.min.js' %}"></script>
+        <script src="{% static 'backend/libs/node-waves/waves.min.js' %}"></script>
+
+
+
+        <!-- jquery.vectormap map -->
+        <script src="{% static 'backend/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.min.js' %}"></script>
+        <script src="{% static 'backend/libs/admin-resources/jquery.vectormap/maps/jquery-jvectormap-us-merc-en.js' %}"></script>
+
+        <!-- Required datatable js -->
+        <script src="{% static 'backend/libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'backend/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+        <!-- Buttons examples -->
+
+        <script src="{% static 'backend/libs/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
+        <script src="{% static 'backend/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js' %}"></script>
+
+        <script src="{% static 'backend/libs/datatables.net-buttons/js/buttons.html5.min.js' %}"></script>
+        <script src="{% static 'backend/libs/datatables.net-buttons/js/buttons.print.min.js' %}"></script>
+        <script src="{% static 'backend/libs/datatables.net-buttons/js/buttons.colVis.min.js' %}"></script>
+
+        <script src="{% static 'backend/libs/datatables.net-keytable/js/dataTables.keyTable.min.js' %}"></script>
+        <script src="{% static 'backend/libs/datatables.net-select/js/dataTables.select.min.js' %}"></script>
+
+        <!-- Responsive examples -->
+        <script src="{% static 'backend/libs/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+        <script src="{% static 'backend/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js' %}"></script>
+
+        <script src="{% static 'backend/js/app.js' %}"></script>
+
+        <script src="{% static 'backend/js/pages/datatables.init.js' %}"></script>
+
+        <!-- toastr plugin -->
+        <!-- DashBoard init -->
+<!--        <script src="{% static 'backend/js/pages/dashboard.init.js' %}"></script>-->
+
+        <!-- apexcharts -->
+<!--        <script src="{% static 'backend/libs/apexcharts/apexcharts.min.js' %}"></script>-->
+    <script>
+    $(document).ready(function(){
+        $('#id_phone').inputmask('(999)-999-9999');
+    });
+    </script>
+    </body>
+</html>

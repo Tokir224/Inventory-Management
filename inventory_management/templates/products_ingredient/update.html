@@ -1,0 +1,214 @@
+{% extends 'include/base.html' %}
+{% load widget_tweaks %}
+{% block my_title %} Products Ingredients {% endblock my_title %}
+{% block my_css %}
+
+
+<style>
+    .account-form input {
+        border: 2px solid #ccc;
+        height: calc(2em + .75rem + 2px);
+    }
+
+    .account-form input:focus {
+        border-color: #1497ff;
+        box-shadow: none;
+    }
+</style>
+{%  endblock %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row no-gutter">
+        <div class="col-md-12">
+            <div class="login d-flex align-items-center py-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-body">
+                                   <form class="needs-validation" method="post" id='id_user_form'  enctype="multipart/form-data" >
+                                       {% csrf_token %}
+                                       <div class="row">
+                                           <div class="col-sm-12">
+                                               <div class="form-group">
+                                                   <label>Product Name</label>
+                                                   <select name="product" class="product-info form-control" required>
+
+
+                                                       {% for product in products %}
+                                                       {% if product.id == selected_product.id %}
+                                                       <option value="{{product.id}}" selected>{{product.name}}</option>
+                                                       {% else %}
+                                                       <option value="{{product.id}}">{{product.name}}</option>
+                                                       {% endif %}
+                                                       {% endfor %}
+                                                   </select>
+                                               </div>
+                                           </div>
+                                           <div class="col-sm-12 mt-3">
+                                               <div class="form-group">
+                                                   <label>Add Product Ingredient</label>
+                                                   <div class="add_product_ingredient">
+                                                       <table width="100%" class="table table-bordered">
+                                                           <tbody id="product_ingredient_box">
+                                                           <input type="hidden" name="ingredient" id="ingredient_count" value="{{product_ingredients|length}}">
+                                                           {% for product_ingredient in product_ingredients %}
+                                                           <tr class="ingredient_{{forloop.counter}}">
+                                                               <td width="25%">
+                                                                   <div class="form-group text-center">
+
+                                                                       <label >Raw Material</label>
+                                                                       <select name="raw-material[]" id="raw-material{{forloop.counter}}" class="raw-material-info form-control" required onchange="changeType({{forloop.counter}})">
+                                                                           {% for raw_material in raw_materials %}
+                                                                           {% if raw_material.id == product_ingredient.raw_material.id %}
+                                                                           <option value="{{raw_material.id}}" selected>{{raw_material.name}}</option>
+                                                                           {% else %}
+                                                                           <option value="{{raw_material.id}}">{{raw_material.name}}</option>
+                                                                           {% endif %}
+                                                                           {% endfor %}
+                                                                       </select>
+                                                                   </div>
+                                                               </td>
+                                                               <td width="30%">
+                                                                   <div class="form-group text-center">
+                                                                       <label >Type</label>
+                                                                       <select name="type[]" id="type{{forloop.counter}}" class="type-info form-control" required>
+                                                                           {% for type in product_ingredient.types %}
+                                                                           {% if type.id == product_ingredient.type %}
+                                                                           <option value="{{type.id}}" selected>{{type.type}}</option>
+                                                                           {% else %}
+                                                                           <option value="{{type.id}}">{{type.type}}</option>
+                                                                           {% endif %}
+                                                                           {% endfor %}
+                                                                       </select>
+                                                                   </div>
+                                                               </td>
+                                                               <td width="30%">
+                                                                   <div class="form-group text-center">
+                                                                       <label >Amount</label>
+                                                                       <input type="number" min="1.0" step="any" name="amount[]" class="amount-info form-control" required value="{{product_ingredient.amount}}">
+                                                                   </div>
+                                                               </td>
+                                                               {% if forloop.counter == 1 %}
+                                                               <td width="30%" class="text-center">
+                                                                   <div class="m-4">
+                                                                       <a href="javascript:void(0)" class="btn btn-info py-auto" id="add_product_ingredient"><i class="mdi mdi-plus"></i></a>
+                                                                   </div>
+                                                               </td>
+                                                               {% else %}
+                                                               <td width="10%" class="text-center">
+                                                                    <div class="m-4">
+                                                                        <a href="javascript:void(0)" class="btn  btn-danger"><i class="mdi mdi-minus"  onclick="removeCoverage({{forloop.counter}})"></i></a>
+                                                                    </div>
+                                                                </td>
+                                                               {% endif %}
+                                                               {% endfor %}
+                                                           </tr>
+                                                           </tbody>
+                                                       </table>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                       </div>
+                                       <div class="row">
+                                            <div class="col-md-6">
+                                                <button class="btn btn-primary button-color" type="submit">Save{{object.id}}</button>
+                                                <a href="{% url 'product:product_ingredient_list' %}" class="btn btn-secondary waves-effect">Cancel</a>
+                                            </div>
+                                        </div>
+                                   </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#add_product_ingredient").on('click', function () {
+        var count = $('#ingredient_count').val();
+        $('#ingredient_count').val(Number(count) + Number(1));
+        var i = $('#ingredient_count').val();
+        var html = `
+        <tr class="ingredient_${i}">
+            <td width="30%">
+                <div class="form-group text-center">
+                    <label >Raw Material</label>
+                    <select name="raw-material[]" id="raw-material${i}" class="raw-material-info form-control" required onchange="changeType(${i})">
+                        <option value="0" selected>-------</option>
+                        {% for raw_material in raw_materials %}
+                        <option value="{{raw_material.id}}">{{raw_material.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </td>
+            <td width="30%">
+                <div class="form-group text-center">
+                    <label >Type</label>
+                    <select name="type[]" id="type${i}" class="type-info form-control" required>
+                        <option value="0" selected>-------</option>
+                        {% for type in types %}
+                        <option value="{{type.id}}">{{type.type}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </td>
+            <td width="30%">
+                <div class="form-group text-center">
+                    <label >Amount</label>
+                    <input type="number" min="1.0" step="any" name="amount[]" class="amount-info form-control" required>
+                </div>
+            </td>
+            <td width="10%" class="text-center">
+                <div class="m-4">
+                    <a href="javascript:void(0)" class="btn  btn-danger"><i class="mdi mdi-minus"  onclick="removeCoverage(${i})"></i></a>
+                </div>
+            </td>
+        </tr>
+        `
+        $('#product_ingredient_box').append(html);
+    });
+
+    function removeCoverage(id) {
+    $(".ingredient_" + id).remove();
+    }
+
+    function changeType(id){
+        $.ajax({
+            type:"GET",
+            url: "{% url 'product:raw_material_type' %}",
+            data:{"raw_material_id":$('#raw-material'+id).find(":selected").val()},
+            success: function( data ) {
+                if (data.product_type == 1){
+                    row =
+                        `<option value="" selected="">---------</option>
+                        <option value="1">KG</option>
+                        <option value="2">G</option>
+                        <option value="3">MG</option>
+                        </select>`
+                }
+                else if (data.product_type == 2){
+                    row =
+                        `<option value="" selected="">---------</option>
+                        <option value="4">L</option>
+                        <option value="5">ML</option>
+                        </select>`
+                }
+                else{
+                    row =
+                        `<option value="" selected="">---------</option>
+                        <option value="6">Pieces</option>
+                        </select>`
+                }
+                $("#type"+id).empty()
+                $("#type"+id).append(row)
+            }
+
+        });
+    }
+</script>
+{% endblock %}

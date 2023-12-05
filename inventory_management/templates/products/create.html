@@ -1,0 +1,57 @@
+{% extends 'include/base.html' %}
+{% load widget_tweaks %}
+{% block my_title %} Products {% endblock my_title %}
+{% block my_css %}
+
+
+<style>
+    .account-form input {
+        border: 2px solid #ccc;
+        height: calc(2em + .75rem + 2px);
+    }
+
+    .account-form input:focus {
+        border-color: #1497ff;
+        box-shadow: none;
+    }
+</style>
+{%  endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row no-gutter">
+        <div class="col-md-12">
+            <div class="login d-flex align-items-center py-5">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-body">
+                                   <form class="needs-validation" method="post" id='id_user_form'  enctype="multipart/form-data" >
+                                    {% csrf_token %}
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Name</label>
+                                                    {{form.name|add_class:'form-control'}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                       <div class="row">
+                                            <div class="col-md-6">
+                                                <button class="btn btn-primary button-color" type="submit">Save</button>
+                                                <a href="{% url 'product:product_list' %}" class="btn btn-secondary waves-effect">Cancel</a>
+                                            </div>
+                                        </div>
+                                   </form>
+                                </div>
+                            </div>
+                            <!-- end card -->
+                        </div> <!-- end col -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

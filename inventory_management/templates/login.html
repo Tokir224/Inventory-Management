@@ -1,0 +1,85 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+    <head>
+
+        <meta charset="utf-8" />
+        <title>Login | Inventory Management </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+        <meta content="Themesdesign" name="author" />
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="{% static 'backend/images/favicon.ico' %}">
+
+        <!-- Bootstrap Css -->
+        <link href="{% static 'backend/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- Icons Css -->
+        <link href="{% static 'backend/css/icons.min.css' %}" rel="stylesheet" type="text/css" />
+        <!-- App Css-->
+        <link href="{% static 'backend/css/app.min.css' %}" rel="stylesheet" type="text/css" />
+
+    </head>
+
+    <body class="auth-body-bg">
+        <div class="container-fluid p-0">
+            <div>
+                <div class="authentication-page-content p-4 d-flex justify-content-center align-items-center min-vh-100">
+                    <div style="width:26%">
+                        <div>
+                            <div class="text-center">
+                                <div>
+<!--                                    <a href="{% static 'backend/images/logo-dark.png' %}" class="logo"><img src="{% static 'backend/images/logo-dark.png' %}" height="20" alt="logo"></a>-->
+                                </div>
+
+                                <h4 class="font-size-18 mt-4">Welcome Back !</h4>
+                            </div>
+
+                            <div class="p-2 mt-5">
+                                <form class="form-horizontal" method="post">
+                                    {% csrf_token %}
+                                    {% if messages %}
+                                    {% for message in messages %}
+                                    <div class="alert alert-primary" role="alert">
+                                        {{message}}
+                                    </div>
+                                    {% endfor %}
+                                    {% endif %}
+                                    <div class="form-group auth-form-group-custom mb-4">
+                                        <i class="ri-user-2-line auti-custom-input-icon"></i>
+                                        <label>{{ form.email.label}}</label>
+                                        {{ form.email}}
+                                    </div>
+
+                                    <div class="form-group auth-form-group-custom mb-4">
+                                        <i class="ri-lock-2-line auti-custom-input-icon"></i>
+                                        <label>{{ form.password.label}}</label>
+                                        {{ form.password }}
+                                    </div>
+
+                                    <div class="mt-4 text-center">
+                                        <button class="btn btn-primary w-md waves-effect waves-light" type="submit">Log In</button>
+                                    </div>
+
+                                    <div class="mt-4 text-center">
+                                        <a href="{% url 'admin_user:password_reset' %}" class="text-muted"><i class="mdi mdi-lock mr-1"></i> Forgot your password?</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JAVASCRIPT -->
+        <script src="{% static 'backend/libs/jquery/jquery.min.js' %}"></script>
+        <script src="{% static 'backend/libs/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+        <script src="{% static 'backend/libs/metismenu/metisMenu.min.js' %}"></script>
+        <script src="{% static 'backend/libs/simplebar/simplebar.min.js' %}"></script>
+        <script src="{% static 'backend/libs/node-waves/waves.min.js' %}"></script>
+
+        <script src="{% static 'backend/js/app.js' %}"></script>
+
+    </body>
+</html>
