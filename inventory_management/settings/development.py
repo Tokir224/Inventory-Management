@@ -7,6 +7,6 @@ DATABASES = {
         'USER': '', # Replace your DB user here
         'PASSWORD': '', # Replace your DB password here
         'HOST': 'localhost',
-        'PORT': '5433',
+        'PORT': '5432', # Replace your DB port here
     }
 }
